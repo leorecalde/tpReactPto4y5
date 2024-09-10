@@ -19,6 +19,11 @@ const Formulario = () => {
     reset();
   };
 
+  const borrarTarea = (nombreTarea) =>{
+    const arrayFiltrado = arrayTareas.filter((tarea) => tarea !== nombreTarea)
+    setArrayTareas(arrayFiltrado)
+  }
+
   return (
     <section>
       <Form onSubmit={handleSubmit(onSubmit)} className="mb-3">
@@ -49,7 +54,7 @@ const Formulario = () => {
           {errors.tarea?.message}
         </Form.Text>
       </Form>
-      <ListaTareas arrayTareas={arrayTareas}></ListaTareas>
+      <ListaTareas arrayTareas={arrayTareas} borrarTarea={borrarTarea}></ListaTareas>
     </section>
   );
 };
