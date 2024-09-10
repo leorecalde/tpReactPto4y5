@@ -2,7 +2,8 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import ListaTareas from "./ListaTareas";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 const Formulario = () => {
   const {
     register,
@@ -11,7 +12,14 @@ const Formulario = () => {
     reset,
   } = useForm();
 
-  const [arrayTareas, setArrayTareas] = useState([]);
+  const leerLocalstorage =
+    JSON.parse(localStorage.getItem("listaTareasKey")) || [];
+  const [arrayTareas, setArrayTareas] = useState(leerLocalstorage);
+
+  useEffect(() => {
+    console.log("se habilita el ciclo de vida de useEffect");
+    localStorage.setItem("listaTareasKey", JSON.stringify(arrayTareas));
+  }, [arrayTareas]);
 
   const onSubmit = (data) => {
     console.log(data.tarea);
@@ -19,10 +27,10 @@ const Formulario = () => {
     reset();
   };
 
-  const borrarTarea = (nombreTarea) =>{
-    const arrayFiltrado = arrayTareas.filter((tarea) => tarea !== nombreTarea)
-    setArrayTareas(arrayFiltrado)
-  }
+  const borrarTarea = (nombreTarea) => {
+    const arrayFiltrado = arrayTareas.filter((tarea) => tarea !== nombreTarea);
+    setArrayTareas(arrayFiltrado);
+  };
 
   return (
     <section>
@@ -54,7 +62,10 @@ const Formulario = () => {
           {errors.tarea?.message}
         </Form.Text>
       </Form>
-      <ListaTareas arrayTareas={arrayTareas} borrarTarea={borrarTarea}></ListaTareas>
+      <ListaTareas
+        arrayTareas={arrayTareas}
+        borrarTarea={borrarTarea}
+      ></ListaTareas>
     </section>
   );
 };
